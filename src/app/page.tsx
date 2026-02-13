@@ -1,9 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Tracefinity",
+  url: "https://tracefinity.net",
+  applicationCategory: "DesignApplication",
+  operatingSystem: "Web",
+  description:
+    "Photograph your tools, trace their outlines with AI, and generate 3D-printable Gridfinity bins that fit them perfectly.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "EUR",
+  },
+};
+
 export default function Home() {
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* hero */}
       <section className="pt-16 pb-20">
         <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.08]">

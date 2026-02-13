@@ -9,7 +9,8 @@ import { UsageStats } from "./usage-stats";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard - Tracefinity",
+  title: "Dashboard",
+  robots: { index: false },
 };
 
 const TIER_RANK: Record<PlanTier, number> = { FREE: 0, STANDARD: 1, PRO: 2 };

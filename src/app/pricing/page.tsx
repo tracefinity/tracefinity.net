@@ -7,8 +7,9 @@ import type { PriceKey } from "@/lib/stripe";
 import type { PlanTier } from "@/lib/plans";
 
 export const metadata: Metadata = {
-  title: "Pricing - Tracefinity",
-  description: "Simple pricing for tool tracing and gridfinity bin generation.",
+  title: "Pricing",
+  description: "Simple pricing for AI tool tracing and Gridfinity bin generation. Free plan included.",
+  alternates: { canonical: "https://tracefinity.net/pricing" },
 };
 
 interface Plan {
