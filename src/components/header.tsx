@@ -16,6 +16,9 @@ export async function Header() {
         <nav className="flex items-center gap-5 text-sm">
           {isLoggedIn ? (
             <>
+              <a href="/api/auth/app-token" className="text-text-muted hover:text-text-primary transition-colors">
+                Open App
+              </a>
               <Link href="/dashboard" className="text-text-muted hover:text-text-primary transition-colors">
                 Dashboard
               </Link>

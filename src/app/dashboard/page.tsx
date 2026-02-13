@@ -38,6 +38,14 @@ export default async function DashboardPage() {
         <SignOutButton />
       </div>
 
+      <a
+        href="/api/auth/app-token"
+        className="mt-8 flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
+      >
+        Open Tracefinity
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-lg border border-border bg-surface p-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Plan</p>
