@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+const BASE_URL = process.env.NEXTAUTH_URL || "https://tracefinity.net";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const token = searchParams.get("token");
   const email = searchParams.get("email");
 
   if (!token || !email) {
-    return NextResponse.redirect(new URL("/login?verify=invalid", request.url));
+    return NextResponse.redirect(`${BASE_URL}/login?verify=invalid`);
   }
 
   const identifier = `verify:${email}`;
@@ -17,13 +19,12 @@ export async function GET(request: Request) {
   });
 
   if (!record || record.expires < new Date()) {
-    // clean up expired token if it exists
     if (record) {
       await prisma.verificationToken.delete({
         where: { identifier_token: { identifier, token } },
       });
     }
-    return NextResponse.redirect(new URL("/login?verify=expired", request.url));
+    return NextResponse.redirect(`${BASE_URL}/login?verify=expired`);
   }
 
   await prisma.user.update({
@@ -35,5 +36,5 @@ export async function GET(request: Request) {
     where: { identifier_token: { identifier, token } },
   });
 
-  return NextResponse.redirect(new URL("/login?verified=true", request.url));
+  return NextResponse.redirect(`${BASE_URL}/login?verified=true`);
 }
