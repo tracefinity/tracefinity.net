@@ -11,6 +11,7 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const registered = searchParams.get("registered") === "true";
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -32,7 +33,8 @@ function LoginForm() {
       return;
     }
 
-    router.push("/dashboard");
+    // full navigation handles both pages and api routes
+    window.location.href = callbackUrl;
   }
 
   return (
