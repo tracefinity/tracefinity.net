@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.tracefinity.net";
 
-interface Usage {
+interface UsageStatsProps {
+  maxTraces: number;
+  maxTools: number | null; // null = unlimited
+}
+
+interface UsageCounts {
   traces_this_month: number;
   tool_count: number;
-  max_traces: number | null;
-  max_tools: number | null;
 }
 
 function getCookie(name: string): string | null {
@@ -17,8 +20,8 @@ function getCookie(name: string): string | null {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-export function UsageStats() {
-  const [usage, setUsage] = useState<Usage | null>(null);
+export function UsageStats({ maxTraces, maxTools }: UsageStatsProps) {
+  const [counts, setCounts] = useState<UsageCounts | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -35,15 +38,25 @@ export function UsageStats() {
         if (!res.ok) throw new Error();
         return res.json();
       })
-      .then(setUsage)
+      .then((data) =>
+        setCounts({
+          traces_this_month: data.traces_this_month,
+          tool_count: data.tool_count,
+        }),
+      )
       .catch(() => setError(true));
   }, []);
+
+  const tracesLabel = maxTraces === Infinity ? "unlimited" : maxTraces;
+  const toolsLabel = maxTools === null ? "unlimited" : maxTools;
 
   if (error) {
     return (
       <>
         <div className="rounded-lg border border-border bg-surface p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Traces</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+            Traces this month
+          </p>
           <p className="mt-2 text-sm text-text-muted">unavailable</p>
         </div>
         <div className="rounded-lg border border-border bg-surface p-5">
@@ -54,11 +67,13 @@ export function UsageStats() {
     );
   }
 
-  if (!usage) {
+  if (!counts) {
     return (
       <>
         <div className="rounded-lg border border-border bg-surface p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Traces</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+            Traces this month
+          </p>
           <p className="mt-2 text-sm text-text-muted">loading...</p>
         </div>
         <div className="rounded-lg border border-border bg-surface p-5">
@@ -68,9 +83,6 @@ export function UsageStats() {
       </>
     );
   }
-
-  const tracesMax = usage.max_traces === null ? "unlimited" : usage.max_traces;
-  const toolsMax = usage.max_tools === null ? "unlimited" : usage.max_tools;
 
   return (
     <>
@@ -79,15 +91,15 @@ export function UsageStats() {
           Traces this month
         </p>
         <p className="mt-2 text-lg font-semibold">
-          {usage.traces_this_month}{" "}
-          <span className="text-sm font-normal text-text-muted">/ {tracesMax}</span>
+          {counts.traces_this_month}{" "}
+          <span className="text-sm font-normal text-text-muted">/ {tracesLabel}</span>
         </p>
       </div>
       <div className="rounded-lg border border-border bg-surface p-5">
         <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Tools</p>
         <p className="mt-2 text-lg font-semibold">
-          {usage.tool_count}{" "}
-          <span className="text-sm font-normal text-text-muted">/ {toolsMax}</span>
+          {counts.tool_count}{" "}
+          <span className="text-sm font-normal text-text-muted">/ {toolsLabel}</span>
         </p>
       </div>
     </>

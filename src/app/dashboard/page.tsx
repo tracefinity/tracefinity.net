@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { type PlanTier } from "@/lib/plans";
+import { PLAN_LIMITS, type PlanTier } from "@/lib/plans";
 import { syncSubscription } from "@/lib/sync-subscription";
 import { SignOutButton } from "./sign-out-button";
 import { PlanChangeSection } from "./plan-change-section";
@@ -22,6 +22,7 @@ export default async function DashboardPage() {
   const subscription = await syncSubscription(session.user.id);
 
   const tier = (subscription?.tier ?? "FREE") as PlanTier;
+  const limits = PLAN_LIMITS[tier];
   const hasBilling = !!subscription?.stripeCustomerId;
 
   return (
@@ -47,7 +48,10 @@ export default async function DashboardPage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Plan</p>
           <p className="mt-2 text-lg font-semibold">{tier}</p>
         </div>
-        <UsageStats />
+        <UsageStats
+          maxTraces={limits.maxTraces}
+          maxTools={limits.maxTools === Infinity ? null : limits.maxTools}
+        />
       </div>
 
       {subscription?.status === "active" && tier !== "FREE" && subscription.currentPeriodEnd && (
