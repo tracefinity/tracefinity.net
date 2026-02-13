@@ -2,7 +2,11 @@ import { Resend } from "resend";
 import crypto from "crypto";
 import { prisma } from "./db";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function resend() {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 const FROM = "Tracefinity <noreply@tracefinity.net>";
 const BASE_URL = process.env.NEXTAUTH_URL || "https://tracefinity.net";
 
@@ -27,7 +31,7 @@ export async function storeToken(identifier: string, token: string, expiresIn: n
 export async function sendVerificationEmail(email: string, token: string) {
   const url = `${BASE_URL}/api/auth/verify-email?token=${token}&email=${encodeURIComponent(email)}`;
 
-  await resend.emails.send({
+  await resend().emails.send({
     from: FROM,
     to: email,
     subject: "Verify your email - Tracefinity",
@@ -43,7 +47,7 @@ export async function sendVerificationEmail(email: string, token: string) {
 export async function sendPasswordResetEmail(email: string, token: string) {
   const url = `${BASE_URL}/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
 
-  await resend.emails.send({
+  await resend().emails.send({
     from: FROM,
     to: email,
     subject: "Reset your password - Tracefinity",
