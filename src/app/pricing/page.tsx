@@ -147,6 +147,10 @@ export default async function PricingPage() {
                     />
                   )}
                 </div>
+              ) : isLoggedIn ? (
+                <p className="mt-5 block rounded-lg px-4 py-2 text-center text-sm font-medium text-text-muted bg-elevated">
+                  {plan.name}
+                </p>
               ) : (
                 <Link
                   href={plan.priceKey ? `/signup?plan=${plan.name.toLowerCase()}` : "/signup"}
@@ -156,7 +160,7 @@ export default async function PricingPage() {
                       : "bg-elevated text-text-secondary hover:text-text-primary hover:bg-border-subtle"
                   }`}
                 >
-                  {isLoggedIn ? "Your plan" : "Get started"}
+                  Get started
                 </Link>
               )}
             </div>
