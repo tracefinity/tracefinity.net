@@ -2,8 +2,15 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { stripe, PRICE_IDS, type PriceKey } from "@/lib/stripe";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const { allowed } = rateLimit(`downgrade:${ip}`, 5, 60 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json({ error: "Too many requests." }, { status: 429 });
+  }
+
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorised." }, { status: 401 });

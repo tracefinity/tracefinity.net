@@ -1,13 +1,22 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { SignJWT } from "jose";
 import { auth } from "@/lib/auth";
 import { syncSubscription } from "@/lib/sync-subscription";
 import { PLAN_LIMITS, type PlanTier } from "@/lib/plans";
+import { rateLimit } from "@/lib/rate-limit";
 
 const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
 const APP_URL = process.env.APP_URL || "https://app.tracefinity.net";
 
 export async function GET() {
+  const hdrs = await headers();
+  const ip = hdrs.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  const { allowed } = rateLimit(`app-token:${ip}`, 10, 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json({ error: "Too many requests." }, { status: 429 });
+  }
+
   const session = await auth();
 
   if (!session?.user?.id) {

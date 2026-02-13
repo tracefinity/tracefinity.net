@@ -1,7 +1,22 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
+
+const DISPOSABLE_DOMAINS = new Set([
+  "mailinator.com", "guerrillamail.com", "guerrillamail.de", "tempmail.com",
+  "throwaway.email", "yopmail.com", "sharklasers.com", "guerrillamailblock.com",
+  "grr.la", "dispostable.com", "trashmail.com", "10minutemail.com",
+  "mailnesia.com", "tempail.com", "tempr.email", "discard.email",
+]);
+
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const { allowed } = rateLimit(`signup:${ip}`, 5, 60 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json({ error: "Too many requests." }, { status: 429 });
+  }
+
   try {
     const { email, password, name } = await request.json();
 
@@ -15,6 +30,14 @@ export async function POST(request: Request) {
     if (password.length < 8) {
       return NextResponse.json(
         { error: "Password must be at least 8 characters." },
+        { status: 400 },
+      );
+    }
+
+    const domain = email.split("@")[1]?.toLowerCase();
+    if (domain && DISPOSABLE_DOMAINS.has(domain)) {
+      return NextResponse.json(
+        { error: "Disposable email addresses are not allowed." },
         { status: 400 },
       );
     }

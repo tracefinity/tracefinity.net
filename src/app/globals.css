@@ -19,3 +19,72 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+.prose-custom h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.prose-custom h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-custom h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.prose-custom p {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.prose-custom ul {
+  margin-top: 0.5rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.prose-custom li {
+  margin-top: 0.25rem;
+}
+
+.prose-custom a {
+  color: var(--color-accent);
+  transition: color 0.15s;
+}
+
+.prose-custom a:hover {
+  color: var(--color-text-primary);
+}
+
+.prose-custom table {
+  margin-top: 0.75rem;
+  width: 100%;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+}
+
+.prose-custom th,
+.prose-custom td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.prose-custom th {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
