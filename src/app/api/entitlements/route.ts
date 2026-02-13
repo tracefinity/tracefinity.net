@@ -19,8 +19,8 @@ export async function GET() {
   return NextResponse.json({
     userId: session.user.id,
     tier,
+    maxTraces: limits.maxTraces,
     maxTools: limits.maxTools,
-    maxBins: limits.maxBins,
     status: sub?.status ?? "active",
   });
 }

@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { PLAN_LIMITS, type PlanTier } from "@/lib/plans";
+import { type PlanTier } from "@/lib/plans";
 import { syncSubscription } from "@/lib/sync-subscription";
 import { SignOutButton } from "./sign-out-button";
 import { PlanChangeSection } from "./plan-change-section";
 import { ManageBillingButton } from "./manage-billing-button";
+import { UsageStats } from "./usage-stats";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -21,12 +22,7 @@ export default async function DashboardPage() {
   const subscription = await syncSubscription(session.user.id);
 
   const tier = (subscription?.tier ?? "FREE") as PlanTier;
-  const limits = PLAN_LIMITS[tier];
   const hasBilling = !!subscription?.stripeCustomerId;
-
-  // placeholder counts until the core app reports real usage
-  const toolCount = 0;
-  const binCount = 0;
 
   return (
     <main className="pt-12">
@@ -51,24 +47,7 @@ export default async function DashboardPage() {
           <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Plan</p>
           <p className="mt-2 text-lg font-semibold">{tier}</p>
         </div>
-        <div className="rounded-lg border border-border bg-surface p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Tools</p>
-          <p className="mt-2 text-lg font-semibold">
-            {toolCount}{" "}
-            <span className="text-sm font-normal text-text-muted">
-              / {limits.maxTools}
-            </span>
-          </p>
-        </div>
-        <div className="rounded-lg border border-border bg-surface p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Bins</p>
-          <p className="mt-2 text-lg font-semibold">
-            {binCount}{" "}
-            <span className="text-sm font-normal text-text-muted">
-              / {limits.maxBins === Infinity ? "unlimited" : limits.maxBins}
-            </span>
-          </p>
-        </div>
+        <UsageStats />
       </div>
 
       {subscription?.status === "active" && tier !== "FREE" && subscription.currentPeriodEnd && (

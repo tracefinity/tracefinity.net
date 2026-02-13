@@ -17,8 +17,8 @@ interface Plan {
   price: string;
   interval: string;
   annual?: string;
+  traces: string;
   tools: string;
-  bins: string;
   featured: boolean;
   priceKey?: PriceKey;
   annualPriceKey?: PriceKey;
@@ -32,8 +32,8 @@ const plans: Plan[] = [
     tier: "FREE",
     price: "0",
     interval: "forever",
-    tools: "5 tools",
-    bins: "2 bins",
+    traces: "5 traces/mo",
+    tools: "10 tools",
     featured: false,
   },
   {
@@ -42,8 +42,8 @@ const plans: Plan[] = [
     price: "7",
     interval: "month",
     annual: "60",
-    tools: "50 tools",
-    bins: "Unlimited bins",
+    traces: "50 traces/mo",
+    tools: "100 tools",
     featured: true,
     priceKey: "STANDARD_MONTHLY",
     annualPriceKey: "STANDARD_YEARLY",
@@ -54,8 +54,8 @@ const plans: Plan[] = [
     price: "12",
     interval: "month",
     annual: "100",
-    tools: "200 tools",
-    bins: "Unlimited bins",
+    traces: "200 traces/mo",
+    tools: "Unlimited tools",
     featured: false,
     priceKey: "PRO_MONTHLY",
     annualPriceKey: "PRO_YEARLY",
@@ -78,7 +78,7 @@ export default async function PricingPage() {
     <main className="pt-12">
       <h1 className="text-2xl font-semibold tracking-tight">Pricing</h1>
       <p className="mt-2 text-text-secondary text-sm">
-        Start free, upgrade when you need more space.
+        Start free, upgrade when you need more traces.
       </p>
 
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -121,8 +121,8 @@ export default async function PricingPage() {
                 </p>
               )}
               <ul className="mt-4 space-y-2 text-sm text-text-secondary">
+                <li>{plan.traces}</li>
                 <li>{plan.tools}</li>
-                <li>{plan.bins}</li>
                 <li>AI-powered tracing</li>
                 <li>STL and 3MF export</li>
               </ul>

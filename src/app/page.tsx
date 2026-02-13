@@ -91,7 +91,7 @@ export default function Home() {
           Start organising your workshop
         </h2>
         <p className="mt-2 text-sm text-text-secondary">
-          Free plan includes 5 tools. No card required.
+          Free plan includes 5 traces per month. No card required.
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <Link

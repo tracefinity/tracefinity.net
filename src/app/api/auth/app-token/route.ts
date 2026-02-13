@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import { auth } from "@/lib/auth";
+import { syncSubscription } from "@/lib/sync-subscription";
+import { PLAN_LIMITS, type PlanTier } from "@/lib/plans";
 
 const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
 const APP_URL = process.env.APP_URL || "https://app.tracefinity.net";
@@ -14,7 +16,15 @@ export async function GET() {
     return NextResponse.redirect(loginUrl);
   }
 
-  const token = await new SignJWT({ id: session.user.id })
+  const sub = await syncSubscription(session.user.id);
+  const tier = (sub?.tier ?? "FREE") as PlanTier;
+  const limits = PLAN_LIMITS[tier];
+
+  const token = await new SignJWT({
+    id: session.user.id,
+    maxTraces: limits.maxTraces === Infinity ? -1 : limits.maxTraces,
+    maxTools: limits.maxTools === Infinity ? -1 : limits.maxTools,
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("24h")

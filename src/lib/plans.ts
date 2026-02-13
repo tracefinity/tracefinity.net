@@ -1,12 +1,12 @@
 export type PlanTier = "FREE" | "STANDARD" | "PRO";
 
 export interface PlanLimits {
+  maxTraces: number;
   maxTools: number;
-  maxBins: number;
 }
 
 export const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
-  FREE: { maxTools: 5, maxBins: 2 },
-  STANDARD: { maxTools: 50, maxBins: Infinity },
-  PRO: { maxTools: 200, maxBins: Infinity },
+  FREE: { maxTraces: 5, maxTools: 10 },
+  STANDARD: { maxTraces: 50, maxTools: 100 },
+  PRO: { maxTraces: 200, maxTools: Infinity },
 };

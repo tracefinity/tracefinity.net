@@ -9,7 +9,7 @@ interface PlanOption {
   rank: number;
   monthlyPrice: string;
   yearlyPrice: string;
-  tools: string;
+  description: string;
   priceKey: PriceKey;
   annualPriceKey: PriceKey;
 }
@@ -20,7 +20,7 @@ const allPlans: PlanOption[] = [
     rank: 1,
     monthlyPrice: "7",
     yearlyPrice: "60",
-    tools: "50 tools, unlimited bins",
+    description: "50 traces/mo, 100 tools",
     priceKey: "STANDARD_MONTHLY",
     annualPriceKey: "STANDARD_YEARLY",
   },
@@ -29,7 +29,7 @@ const allPlans: PlanOption[] = [
     rank: 2,
     monthlyPrice: "12",
     yearlyPrice: "100",
-    tools: "200 tools, unlimited bins",
+    description: "200 traces/mo, unlimited tools",
     priceKey: "PRO_MONTHLY",
     annualPriceKey: "PRO_YEARLY",
   },
@@ -100,7 +100,7 @@ function UpgradeCard({ plan }: { plan: PlanOption }) {
   return (
     <div className="rounded-lg border border-border bg-surface p-5">
       <h3 className="text-sm font-semibold">{plan.name}</h3>
-      <p className="mt-1 text-xs text-text-secondary">{plan.tools}</p>
+      <p className="mt-1 text-xs text-text-secondary">{plan.description}</p>
       <div className="mt-3 flex gap-2">
         <button
           onClick={() => checkout(plan.annualPriceKey, "yearly")}
@@ -166,7 +166,7 @@ function DowngradeCard({ plan }: { plan: PlanOption }) {
   return (
     <div className="rounded-lg border border-border bg-surface p-5">
       <h3 className="text-sm font-semibold">{plan.name}</h3>
-      <p className="mt-1 text-xs text-text-secondary">{plan.tools}</p>
+      <p className="mt-1 text-xs text-text-secondary">{plan.description}</p>
       <button
         onClick={() => setConfirm(true)}
         className="mt-3 w-full rounded-lg bg-elevated border border-white/6 px-3 py-2 text-xs font-medium text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
@@ -222,7 +222,7 @@ function CancelToFreeCard() {
   return (
     <div className="rounded-lg border border-border bg-surface p-5">
       <h3 className="text-sm font-semibold">Free</h3>
-      <p className="mt-1 text-xs text-text-secondary">5 tools, 2 bins</p>
+      <p className="mt-1 text-xs text-text-secondary">5 traces/mo, 10 tools</p>
       <button
         onClick={() => setConfirm(true)}
         className="mt-3 w-full rounded-lg bg-elevated border border-white/6 px-3 py-2 text-xs font-medium text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
