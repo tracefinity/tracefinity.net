@@ -18,18 +18,18 @@ const allPlans: PlanOption[] = [
   {
     name: "Standard",
     rank: 1,
-    monthlyPrice: "7",
-    yearlyPrice: "60",
-    description: "50 traces/mo, 100 tools",
+    monthlyPrice: "9",
+    yearlyPrice: "79",
+    description: "25 traces/mo, 100 tools",
     priceKey: "STANDARD_MONTHLY",
     annualPriceKey: "STANDARD_YEARLY",
   },
   {
     name: "Pro",
     rank: 2,
-    monthlyPrice: "12",
-    yearlyPrice: "100",
-    description: "200 traces/mo, unlimited tools",
+    monthlyPrice: "19",
+    yearlyPrice: "159",
+    description: "75 traces/mo, unlimited tools",
     priceKey: "PRO_MONTHLY",
     annualPriceKey: "PRO_YEARLY",
   },
@@ -222,7 +222,7 @@ function CancelToFreeCard() {
   return (
     <div className="rounded-lg border border-border bg-surface p-5">
       <h3 className="text-sm font-semibold">Free</h3>
-      <p className="mt-1 text-xs text-text-secondary">5 traces/mo, 10 tools</p>
+      <p className="mt-1 text-xs text-text-secondary">2 traces/mo, 10 tools</p>
       <button
         onClick={() => setConfirm(true)}
         className="mt-3 w-full rounded-lg bg-elevated border border-white/6 px-3 py-2 text-xs font-medium text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"

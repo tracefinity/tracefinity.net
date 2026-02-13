@@ -6,7 +6,7 @@ export interface PlanLimits {
 }
 
 export const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
-  FREE: { maxTraces: 5, maxTools: 10 },
-  STANDARD: { maxTraces: 50, maxTools: 100 },
-  PRO: { maxTraces: 200, maxTools: Infinity },
+  FREE: { maxTraces: 2, maxTools: 10 },
+  STANDARD: { maxTraces: 25, maxTools: 100 },
+  PRO: { maxTraces: 75, maxTools: Infinity },
 };
