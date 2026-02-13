@@ -11,6 +11,9 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const registered = searchParams.get("registered") === "true";
+  const verified = searchParams.get("verified") === "true";
+  const reset = searchParams.get("reset") === "true";
+  const verifyStatus = searchParams.get("verify");
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -49,7 +52,31 @@ function LoginForm() {
 
       {registered && (
         <p className="mt-4 text-sm text-green-400">
-          Account created. Log in to continue.
+          Account created. Check your email to verify, then log in.
+        </p>
+      )}
+
+      {verified && (
+        <p className="mt-4 text-sm text-green-400">
+          Email verified. Log in to continue.
+        </p>
+      )}
+
+      {reset && (
+        <p className="mt-4 text-sm text-green-400">
+          Password reset. Log in with your new password.
+        </p>
+      )}
+
+      {verifyStatus === "expired" && (
+        <p className="mt-4 text-sm text-red-400">
+          Verification link expired. Log in and resend from the dashboard.
+        </p>
+      )}
+
+      {verifyStatus === "invalid" && (
+        <p className="mt-4 text-sm text-red-400">
+          Invalid verification link.
         </p>
       )}
 
@@ -68,9 +95,17 @@ function LoginForm() {
           />
         </div>
         <div>
-          <label htmlFor="password" className="block text-sm text-text-secondary mb-1">
-            Password
-          </label>
+          <div className="flex items-center justify-between mb-1">
+            <label htmlFor="password" className="text-sm text-text-secondary">
+              Password
+            </label>
+            <Link
+              href="/forgot-password"
+              className="text-xs text-accent hover:text-text-primary transition-colors"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <input
             id="password"
             name="password"

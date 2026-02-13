@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { generateToken, storeToken, sendVerificationEmail } from "@/lib/email";
 
 const DISPOSABLE_DOMAINS = new Set([
   "mailinator.com", "guerrillamail.com", "guerrillamail.de", "tempmail.com",
@@ -62,6 +63,15 @@ export async function POST(request: Request) {
         },
       },
     });
+
+    // send verification email (non-blocking -- don't fail signup if email fails)
+    try {
+      const token = generateToken();
+      await storeToken(`verify:${email}`, token, 24 * 60 * 60 * 1000);
+      await sendVerificationEmail(email, token);
+    } catch {
+      // email send failed, user can resend from dashboard
+    }
 
     return NextResponse.json({ id: user.id, email: user.email }, { status: 201 });
   } catch {

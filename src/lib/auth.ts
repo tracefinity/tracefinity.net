@@ -41,7 +41,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         clearLoginFailures(email);
-        return { id: user.id, email: user.email, name: user.name, image: user.image };
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+          emailVerified: user.emailVerified,
+        };
       },
     }),
   ],

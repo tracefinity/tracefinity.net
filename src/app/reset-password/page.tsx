@@ -1,18 +1,38 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FormEvent, Suspense, useState } from "react";
 
-export default function SignupPage() {
+function ResetPasswordForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
+
+  if (!token || !email) {
+    return (
+      <main className="pt-12 max-w-sm mx-auto">
+        <h1 className="text-2xl font-semibold tracking-tight">Invalid link</h1>
+        <p className="mt-4 text-sm text-text-secondary">
+          This password reset link is invalid or has expired.
+        </p>
+        <Link
+          href="/forgot-password"
+          className="mt-4 inline-block text-sm text-accent hover:text-text-primary transition-colors"
+        >
+          Request a new one
+        </Link>
+      </main>
+    );
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const password = formData.get("password") as string;
@@ -20,18 +40,15 @@ export default function SignupPage() {
 
     if (password !== confirm) {
       setError("Passwords do not match.");
-      setLoading(false);
       return;
     }
 
-    const res = await fetch("/api/auth/signup", {
+    setLoading(true);
+
+    const res = await fetch("/api/auth/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: formData.get("email"),
-        password,
-        name: formData.get("name"),
-      }),
+      body: JSON.stringify({ email, token, password }),
     });
 
     setLoading(false);
@@ -42,48 +59,17 @@ export default function SignupPage() {
       return;
     }
 
-    router.push("/login?registered=true");
+    router.push("/login?reset=true");
   }
 
   return (
     <main className="pt-12 max-w-sm mx-auto">
-      <h1 className="text-2xl font-semibold tracking-tight">Sign up</h1>
-      <p className="mt-2 text-sm text-text-secondary">
-        Already have an account?{" "}
-        <Link href="/login" className="text-accent hover:text-text-primary transition-colors">
-          Log in
-        </Link>
-      </p>
+      <h1 className="text-2xl font-semibold tracking-tight">Set new password</h1>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm text-text-secondary mb-1">
-            Name
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            autoComplete="name"
-            className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none"
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="block text-sm text-text-secondary mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none"
-          />
-        </div>
-        <div>
           <label htmlFor="password" className="block text-sm text-text-secondary mb-1">
-            Password (min 8 characters)
+            New password (min 8 characters)
           </label>
           <input
             id="password"
@@ -117,13 +103,17 @@ export default function SignupPage() {
           disabled={loading}
           className="w-full rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-hover transition-colors disabled:opacity-50"
         >
-          {loading ? "Creating account..." : "Create account"}
+          {loading ? "Resetting..." : "Reset password"}
         </button>
       </form>
-
-      <p className="mt-4 text-xs text-text-muted">
-        Free plan includes 10 tools and 2 traces. No card required.
-      </p>
     </main>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

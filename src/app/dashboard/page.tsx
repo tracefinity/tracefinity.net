@@ -6,6 +6,7 @@ import { SignOutButton } from "./sign-out-button";
 import { PlanChangeSection } from "./plan-change-section";
 import { ManageBillingButton } from "./manage-billing-button";
 import { UsageStats } from "./usage-stats";
+import { VerifyBanner } from "./verify-banner";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -35,6 +36,8 @@ export default async function DashboardPage() {
         </div>
         <SignOutButton />
       </div>
+
+      {!session.user.emailVerified && <VerifyBanner />}
 
       <a
         href="/api/auth/app-token"
