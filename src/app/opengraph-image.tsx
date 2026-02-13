@@ -19,6 +19,7 @@ export default function OGImage() {
           background: "#0a0f1a",
           color: "#f1f5f9",
           fontFamily: "system-ui, sans-serif",
+          position: "relative",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -44,41 +45,35 @@ export default function OGImage() {
         </div>
         <div
           style={{
+            display: "flex",
+            flexDirection: "column",
             marginTop: "40px",
-            fontSize: "56px",
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: "-0.03em",
             maxWidth: "800px",
           }}
         >
-          Photograph tools.
-          <br />
-          <span style={{ color: "#2475c6" }}>Print storage.</span>
+          <span style={{ fontSize: "56px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.03em" }}>
+            Photograph tools.
+          </span>
+          <span style={{ fontSize: "56px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.03em", color: "#2475c6" }}>
+            Print storage.
+          </span>
+        </div>
+        <div style={{ display: "flex", marginTop: "24px" }}>
+          <span style={{ fontSize: "24px", color: "#94a3b8", lineHeight: 1.5 }}>
+            AI-powered tool tracing for 3D-printable Gridfinity bins.
+          </span>
         </div>
         <div
           style={{
-            marginTop: "24px",
-            fontSize: "24px",
-            color: "#94a3b8",
-            lineHeight: 1.5,
-            maxWidth: "700px",
-          }}
-        >
-          AI-powered tool tracing for 3D-printable Gridfinity bins.
-        </div>
-        <div
-          style={{
+            display: "flex",
             position: "absolute",
             bottom: "60px",
             right: "80px",
-            display: "flex",
-            gap: "32px",
             fontSize: "18px",
             color: "#64748b",
           }}
         >
-          <span>tracefinity.net</span>
+          tracefinity.net
         </div>
       </div>
     ),
