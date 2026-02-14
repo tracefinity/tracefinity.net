@@ -7,6 +7,7 @@ import { PlanChangeSection } from "./plan-change-section";
 import { ManageBillingButton } from "./manage-billing-button";
 import { UsageStats } from "./usage-stats";
 import { VerifyBanner } from "./verify-banner";
+import { DeleteAccountSection } from "./delete-account-section";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -76,6 +77,8 @@ export default async function DashboardPage() {
         currentTierRank={TIER_RANK[tier]}
         cancellingAtPeriodEnd={subscription?.cancelAtPeriodEnd ?? false}
       />
+
+      <DeleteAccountSection email={session.user.email!} />
     </main>
   );
 }

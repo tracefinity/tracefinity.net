@@ -13,6 +13,7 @@ function LoginForm() {
   const registered = searchParams.get("registered") === "true";
   const verified = searchParams.get("verified") === "true";
   const reset = searchParams.get("reset") === "true";
+  const deleted = searchParams.get("deleted") === "true";
   const verifyStatus = searchParams.get("verify");
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
@@ -49,6 +50,12 @@ function LoginForm() {
           Sign up
         </Link>
       </p>
+
+      {deleted && (
+        <p className="mt-4 text-sm text-text-muted">
+          Your account has been deleted.
+        </p>
+      )}
 
       {registered && (
         <p className="mt-4 text-sm text-green-400">
