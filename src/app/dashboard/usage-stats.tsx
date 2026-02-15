@@ -7,6 +7,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.tracefinity.net"
 interface UsageStatsProps {
   maxTraces: number;
   maxTools: number | null; // null = unlimited
+  appToken: string;
 }
 
 interface UsageCounts {
@@ -14,25 +15,13 @@ interface UsageCounts {
   tool_count: number;
 }
 
-function getCookie(name: string): string | null {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-export function UsageStats({ maxTraces, maxTools }: UsageStatsProps) {
+export function UsageStats({ maxTraces, maxTools, appToken }: UsageStatsProps) {
   const [counts, setCounts] = useState<UsageCounts | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const token = getCookie("tracefinity-app-token");
-    if (!token) {
-      setError(true);
-      return;
-    }
-
     fetch(`${APP_URL}/api/usage`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${appToken}` },
     })
       .then((res) => {
         if (!res.ok) throw new Error();
@@ -45,7 +34,7 @@ export function UsageStats({ maxTraces, maxTools }: UsageStatsProps) {
         }),
       )
       .catch(() => setError(true));
-  }, []);
+  }, [appToken]);
 
   const tracesLabel = maxTraces === Infinity ? "unlimited" : maxTraces;
   const toolsLabel = maxTools === null ? "unlimited" : maxTools;

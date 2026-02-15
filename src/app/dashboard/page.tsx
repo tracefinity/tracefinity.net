@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
+import { SignJWT } from "jose";
 import { auth } from "@/lib/auth";
 import { PLAN_LIMITS, type PlanTier } from "@/lib/plans";
 import { syncSubscription } from "@/lib/sync-subscription";
+
+const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
 import { SignOutButton } from "./sign-out-button";
 import { PlanChangeSection } from "./plan-change-section";
 import { ManageBillingButton } from "./manage-billing-button";
@@ -27,6 +30,12 @@ export default async function DashboardPage() {
   const tier = (subscription?.tier ?? "FREE") as PlanTier;
   const limits = PLAN_LIMITS[tier];
   const hasBilling = !!subscription?.stripeCustomerId;
+
+  const appToken = await new SignJWT({ id: session.user.id })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("5m")
+    .sign(secret);
 
   return (
     <main className="pt-12">
@@ -56,6 +65,7 @@ export default async function DashboardPage() {
         <UsageStats
           maxTraces={limits.maxTraces}
           maxTools={limits.maxTools === Infinity ? null : limits.maxTools}
+          appToken={appToken}
         />
       </div>
 
